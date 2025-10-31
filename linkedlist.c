@@ -66,13 +66,24 @@ if(temp == NULL){
 }
 return head;
 }
+node* deleteatstart(node*head){
+if(head==NULL){
+    printf("hell nah\n");
+    return head;
+}
+node*temp=head;
+temp=temp->next;
+head=temp;
+return head;
+}
 int main(){
     node*head=NULL;
    head=insertatback(head,10);
    head=insertatback(head,20);
    head=insertatback(head,30);
    head=insertatback(head,40);
-   head=insertatk()
+   head=insertatk(head,60,3);
+   head=deleteatstart(head);
    node*temp=head;
    while(temp != NULL){
     printf("%d\n",temp->marks);
