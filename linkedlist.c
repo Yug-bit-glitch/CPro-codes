@@ -26,11 +26,13 @@ return head;
 
 node* insertatback(node*head,int data){
 node*new=(node*)malloc(sizeof(node));
+if(new==NULL){
+    printf("NULL\n");
+    return head;
+}
 new->marks=data;
 new->next=NULL;
-if(new==NULL){
-    printf("NULL");
-    return head;
+
    if(head==NULL){
     head=new;
    }
@@ -42,15 +44,10 @@ if(new==NULL){
     }
     temp->next=new;
    }
-}
-return head;
+   return head;
 }
 int main(){
     node*head=NULL;
-   head=insertatstart(head,10);
-   head=insertatstart(head,20);
-   head=insertatstart(head,30);
-   head=insertatstart(head,40);
    head=insertatback(head,10);
    head=insertatback(head,20);
    head=insertatback(head,30);
