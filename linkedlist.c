@@ -46,12 +46,33 @@ new->next=NULL;
    }
    return head;
 }
+node* insertatk(node*head,int data,int k){
+    // made mistake in maintaning count 
+int count=1;
+node*temp=head;
+while((temp!= NULL) &&(count<k)){
+    count++;
+    temp=temp->next;
+}
+if(temp == NULL){
+    printf("Not possible\n");
+}else{
+    node*new=(node*)malloc(sizeof(node));
+    new->marks=data;
+    new->next=NULL;
+    node*temp1=temp->next;
+    temp->next=new;
+    new->next=temp1;
+}
+return head;
+}
 int main(){
     node*head=NULL;
    head=insertatback(head,10);
    head=insertatback(head,20);
    head=insertatback(head,30);
    head=insertatback(head,40);
+   head=insertatk()
    node*temp=head;
    while(temp != NULL){
     printf("%d\n",temp->marks);
