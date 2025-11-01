@@ -16,8 +16,10 @@ int result=0;
 int high=k-1;
 int count=0;
 while((count<k)&&(head != NULL)&&(k>=0)){
-   result+=((head->next)->val)*pow(2,high);
    head=head->next;
+   int h;
+   head->val=h;
+   result+=(h*pow(2,high));
    high--;
 }
 return result;
