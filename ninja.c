@@ -22,14 +22,23 @@ int main(){
         return 0;
     }
     
-    // Memoization didnt work trying malloc
-    int *arr=(int*)malloc(n*sizeof(int));
+    // Memoization didnt work trying malloc(n+1)
+    int *arr=(int*)malloc((n+1)*sizeof(int));
     // Fill array from index 4 to n using recurrence relation
     // arr[i] = arr[i-1] + arr[i-2] + arr[i-3]
+
+    arr[0] = 0;
+    arr[1] = 1;
+    arr[2] = 2;
+    arr[3] = 4;
+    
     for(int i = 4; i <= n; i++) {
-        arr[i] = arr[i-1] + arr[i-2] + arr[i-3];
+        arr[i] = (arr[i-1] + arr[i-2] + arr[i-3]) % 1000000007 ;
     }
     
     printf("%d", arr[n]);
+
+
+    free(arr);
     return 0;
 }
