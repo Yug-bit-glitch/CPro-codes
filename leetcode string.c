@@ -71,3 +71,38 @@ struct ListNode* removeElements(struct ListNode* head, int val) {
     return temp->next;
     }
 
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* swapPairs(struct ListNode* head) {
+    if(head== NULL){
+        return head;
+    }
+    struct ListNode* new=malloc(sizeof(struct ListNode));
+        new->next=head;
+    struct ListNode* prev=new;
+    
+
+    while((prev->next != NULL)&&(prev->next->next != NULL)){
+       struct ListNode*first=prev->next;
+       struct ListNode*second=first->next;
+// 1 is connected to 3
+       first->next=second->next;
+       // 2 is connected to 1
+       second->next=first;
+       prev->next=second;
+
+       prev=first;
+
+    }
+return new->next;
+free(new);
+free(prev);
+}
+
