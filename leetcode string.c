@@ -15,3 +15,32 @@ for(int i=0;i<=len1-len2;i++){
 }
 return -1;
 }
+
+
+
+bool isPalindrome(char* s) {
+    int len=strlen(s);
+    int low=0;
+    int high=len-1;
+
+    while(low<high){
+    if(isalnum(s[low])==0){
+        low++;
+        continue;
+    }
+
+     if(isalnum(s[high])==0){
+        high--;
+        continue;
+    }
+
+    // now tolower is used
+
+    if(tolower(s[low])!= tolower(s[high])){
+        return false;
+    }
+    high--;
+    low++;
+    }
+    return true;
+}
