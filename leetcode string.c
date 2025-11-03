@@ -44,3 +44,30 @@ bool isPalindrome(char* s) {
     }
     return true;
 }
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* removeElements(struct ListNode* head, int val) {
+    if(head == NULL){
+        return head;
+    }
+    struct ListNode* temp=malloc(sizeof(struct ListNode));
+    temp->next=head;
+    struct ListNode* curr=temp;
+
+    while(curr->next != NULL){
+     if((curr->next)->val==val){
+        curr->next=curr->next->next;
+     }else{
+        curr=curr->next;
+     }
+    }
+    return temp->next;
+    }
+
