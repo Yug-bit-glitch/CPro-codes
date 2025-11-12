@@ -332,7 +332,63 @@ int* countBits(int n, int* returnSize) {
             count++;
         }
         ans[i] = count;
+int maxProfit(int* prices, int pricesSize) {
+    int max=0;
+    int min=prices[0];
+    /*
+    if the min price is after the max then no trade
+    */
+    for(int i=0;i<pricesSize;i++){
+        if(prices[i]<min){
+            min=prices[i];
+        }else if((prices[i]-min) > max){
+            max=prices[i]-min;
+        }
+    }
+    return max;
+}
+
     }
 
     return ans; // ✅ valid return
+}
+
+int climbStairs(int n) {
+    int a=1;
+    int b=2;
+    int temp;
+    for(int i=3;i<=n;i++){
+        temp=a+b;
+        a=b;
+        b=temp;
+    }
+    if(n==1){
+        return 1;
+    }
+    if(n==2){
+        return 2;
+    }
+    return temp;
+}
+
+int min(int a,int b){
+    if(a>b){
+        return b;
+    }else{
+        return a;
+    }
+}
+    int minCostClimbingStairs(int* cost, int costSize) {
+if(costSize == 0)return 0;
+if(costSize==1)return cost[0];
+
+int l1=cost[0];
+int l2=cost[1];
+
+for(int i=2;i<costSize;i++){
+    int present=cost[i]+min(l1,l2);
+    l1=l2;
+    l2=present;
+}
+return min(l2,l1);
 }
