@@ -392,3 +392,99 @@ for(int i=2;i<costSize;i++){
 }
 return min(l2,l1);
 }
+
+🐸 1. Frog Jump (1-Step / 2-Step)
+
+State: dp[i] = min cost to reach stone i.
+Transition: dp[i] = min(dp[i-1] + |h[i]-h[i-1]|, dp[i-2] + |h[i]-h[i-2]|)
+Base: dp[1] = 0.
+➡️ Bottom-up simple tabulation.
+
+🐸 2. Frog Jump (K-distance – Recursion + Memoization)
+
+State: f(n) = min cost to reach stone n.
+Transition: f(n) = min( f(n-i) + |h[n]-h[n-i]| ) for all i ≤ k.
+Base: f(1)=0.
+➡️ Top-down recursion + memoization.
+
+🎲 3. Dice Combinations (Number of ways to get sum n)
+
+State: f(n) = number of ways to form sum n.
+Transition: f(n) = f(n-1)+f(n-2)+…+f(n-6)
+Base: f(0)=1.
+➡️ Count ordered ways using 6-faced dice, % mod.
+
+💰 4. Coin Change (Minimum Coins – Bottom-Up)
+
+State: dp[x] = min coins to form sum x.
+Transition: dp[x] = min(dp[x], dp[x-coin[j]] + 1)
+Base: dp[0]=0, others = ∞.
+➡️ Nested loops: outer → sum, inner → coins.
+
+🪙 5. Coin Combinations I (Count Ordered Ways)
+
+State: dp[x] = number of ordered ways to form sum x.
+Transition: dp[i] += dp[i-coin[j]]
+Base: dp[0]=1.
+➡️ Order matters → outer loop on sum.
+
+🪙 6. Coin Combinations II (Count Unordered Ways – Recursion + Memo)
+
+State: f(i, x) = ways to form sum x using coins from index i.
+Transition:
+
+Take current coin → f(i, x-coin[i])
+
+Skip coin → f(i+1, x)
+Base: if x==0 → 1; if i==n or x<0 → 0.
+➡️ Avoids duplicates → unordered combinations.
+
+🧵 7. LCS (Longest Common Subsequence)
+
+State: dp[i][j] = LCS of text1[0..i-1] & text2[0..j-1].
+Transition:
+
+if same: dp[i][j] = dp[i-1][j-1] + 1
+
+else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+Base: first row/col = 0.
+➡️ Classic 2D DP on strings.
+
+💵 8. Coin Change (Leetcode 322 – Min Coins)
+
+Same logic as #4.
+Use large sentinel (like 10005) for impossible.
+Return -1 if unreachable.
+
+➡️ dp[i] = min(dp[i], dp[i - coin[j]] + 1).
+
+🔢 9. Count Bits
+
+For each i: count bits using
+while(x) { x &= (x-1); count++; }
+➡️ Not DP, bit manipulation practice.
+
+📈 10. Best Time to Buy & Sell Stock
+
+Track running minimum and maximum profit:
+
+minPrice = min(minPrice, price[i])
+maxProfit = max(maxProfit, price[i] - minPrice)
+
+
+➡️ Greedy single pass O(n).
+
+🧗 11. Climb Stairs
+
+State: f(n) = number of ways to reach step n.
+Transition: f(n)=f(n-1)+f(n-2)
+Base: f(1)=1, f(2)=2.
+➡️ Fibonacci pattern; use rolling variables.
+
+🪜 12. Min Cost Climbing Stairs
+
+State: cost to reach step i = cost[i] + min(prev1, prev2)
+Transition:
+cur = cost[i] + min(l1, l2)
+Then roll values.
+➡️ Like Frog Jump but 1-step or 2-step cost.
