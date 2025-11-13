@@ -488,3 +488,102 @@ Transition:
 cur = cost[i] + min(l1, l2)
 Then roll values.
 ➡️ Like Frog Jump but 1-step or 2-step cost.
+
+
+
+1️⃣ FROG JUMP 1
+Logic: f(i)=min(f(i−1)+|h[i]−h[i−1]|, f(i−2)+|h[i]−h[i−2]|)
+Base: f(1)=0
+Errors: mixed 0/1 indexing → fixed by 1-indexing h[1..n].
+
+2️⃣ FROG JUMP 2 (K-distance)
+Logic: f(i)=min(f(i−j)+|h[i]−h[i−j]|) for j≤k
+Base: f(1)=0
+Errors: forgot to check (i−j≥1), didn’t init ans=INT_MAX.
+Fix: loop j=1→k and store memo before returning.
+
+3️⃣ DICE COMBINATIONS
+Logic: f(n)=Σ f(n−i) for i=1..6
+Base: f(0)=1
+Errors: missed %mod, missing memo init.
+Fix: sum=(sum+way(n−i,memo))%mod.
+
+4️⃣ COIN COMBINATION I (ORDERED)
+Logic: f(x)=Σ f(x−c[i])
+Base: f(0)=1
+Errors: mixed with Coin II logic, missed modulo & x−c[i]≥0 check.
+Fix: loop coins inside sum with %mod and memo[x]=ans.
+
+5️⃣ COIN COMBINATION II (UNORDERED)
+Logic: f(i,x)=f(i−1,x)+f(i,x−c[i])
+Base: f(0,0)=1
+Errors: wrong recursion calls, missed 2D memo.
+Fix: use 2D DP cleanly or bottom-up.
+
+6️⃣ CLIMBING STAIRS WITH COST
+Logic: f(i)=cost[i]+min(f(i−1),f(i−2))
+Base: f(0)=0
+Errors: confused last step handling.
+Fix: return min(f[n−1],f[n−2]) at end.
+
+7️⃣ HOUSE ROBBER
+Logic: f(i)=max(f(i−1),a[i]+f(i−2))
+Base: f(0)=a[0], f(1)=max(a[0],a[1])
+Errors: didn’t handle i<0, forgot base.
+Fix: if(i<0)return0; use memo.
+
+8️⃣ TARO’S VACATION (3 Activities)
+Logic: f(day,act)=a[day][act]+max(f(day−1,other acts))
+Errors: missing second dimension in memo.
+Fix: use memo[day][act], loop other acts.
+
+9️⃣ DICE ROLL (Same as Coin Comb I)
+Logic: f(n)=Σ f(n−i) for i=1..6
+Base: f(0)=1
+Errors: same as Dice 1, fixed with modulo & memo.
+
+🔟 COIN MINIMIZATION
+Logic: f(x)=min(f(x−c[i])+1)
+Base: f(0)=0, dp[x]=INF
+Errors: missed boundary x−c[i]≥0
+Fix: correct double loop DP table.
+
+11️⃣ LONGEST INCREASING SUBSEQUENCE (LIS)
+Logic: dp[i]=max(dp[j]+1) for j<i and nums[j]<nums[i]
+Base: dp[i]=1
+Errors: dp 1-indexed but nums 0-indexed, wrong update dp[i]=max(1,1+dp[j]), returned dp[n] not max(dp[i]).
+Fix: dp[i]=max(dp[i],dp[j]+1); final ans=max(dp[i]).
+
+✅ Patterns mastered:
+
+Frog 1, Frog 2 → Min transitions
+
+Dice, Coin 1, Coin 2 → Counting
+
+Coin Min, Stairs → Min steps/cost
+
+House Robber, Vacation, LIS → Max transitions
+
+⚙️ Your historical mistakes:
+
+Index confusion (0 vs 1 based)
+
+Missing memo initialization
+
+Forgetting base cases (f(0), f(1))
+
+Not checking boundaries (x−c[i]≥0)
+
+Modulo placement inside loop
+
+Returning wrong dp index (dp[n] instead of max(dp[i]))
+
+💪 Current status:
+
+Fully solid in recursion + memoization.
+
+Confident in top-down DP.
+
+Avoids DP-table except for Coin Min type.
+
+Only reminder: always define base case + memo + index clearly.
