@@ -1,0 +1,486 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int min(int a,int b){
+    if(a>b){
+        return b;
+    }else{
+        return a;
+    }
+}
+int main(){
+int n;
+scanf("%d",&n);
+int *a=malloc((n+1)*sizeof(int));
+a[0]=0;
+for(int i=1;i<=n;i++){
+scanf("%d",&a[i]);
+}
+int*cost=malloc((n+1)*sizeof(int));
+cost[1]=0;
+for(int i=2;i<=n;i++){
+    int p1=cost[i-1]+abs(a[i]-a[i-1]);
+    if(i==2){
+        cost[2]=p1;
+    }else{
+    int p2=cost[i-2]+abs(a[i]-a[i-2]);
+    cost[i]=min(p1,p2);
+    }
+}
+int ans=cost[n];
+printf("%d\n",ans);
+free(a);
+free(cost);
+return 0;
+}
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+// recursion+memoization
+
+int min(int a, int b)
+{
+    if (a > b)
+    {
+        return b;
+    }
+    else
+    {
+        return a;
+    }
+}
+
+int mincost(int n, int k, int *h, int *memo)
+{
+    if (n == 1)
+        return 0;
+
+    if (memo[n] != -1)
+        return memo[n];
+
+    int ans = INT_MAX;
+
+    for (int i = 1; i <= k; i++)
+    {
+        if(n-i>=1){
+        int cost = mincost(n - i, k, h, memo) + abs(h[n - 1] - h[n - 1 - i]);
+        ans = min(ans, cost);
+        }
+    }
+    memo[n] = ans;
+    return memo[n];
+}
+
+int main()
+{
+
+    int n, k;
+    scanf("%d %d", &n, &k);
+
+    int *h = malloc(n * sizeof(int));
+    int *memo = malloc((n + 1) * sizeof(int));
+    for (int i = 0; i <= n; i++)
+    {
+        memo[i] = -1;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &h[i]);
+    }
+
+    printf("%d\n", mincost(n, k, h, memo));
+
+    free(h);
+    free(memo);
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#define mod 1000000007
+ 
+ 
+ 
+int way(int n,int *memo){
+    if(n==0)return 1;
+    if(n<0)return 0;
+    if(memo[n] != -1)return memo[n];
+ 
+    long long sum =0;
+   for(int i=1;i<=6;i++){
+    sum=(sum+ way(n-i,memo)) % mod;
+   }
+   memo[n]=sum;
+  return memo[n];
+}
+ 
+int main() {
+    int n;
+    scanf("%d", &n);
+ 
+    int *memo = malloc((n + 1) * sizeof(int));
+    for (int i = 0; i <= n; i++) memo[i] = -1;
+ 
+    printf("%d\n", way(n, memo));
+ 
+    free(memo);
+    return 0;
+
+
+    return 0;
+}
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<limits.h>
+ 
+int min(int a,int b){
+    if(a>b){
+        return b;
+    }else{
+        return a;
+    }
+}
+ 
+int main(){
+ 
+int n,x;
+scanf("%d %d",&n,&x);
+ 
+int *a=(int*)malloc(n*sizeof(int));
+for(int i=0;i<n;i++){
+    scanf("%d",&a[i]);
+}
+/*to reach a specific coin there can be two ways one is 
+to f(x)or f(x-j)+1 we have to make a recursion type relation to minimize it at every step
+*/
+ 
+int *dp=malloc((x+1)*sizeof(int));
+ 
+dp[0]=0;
+for(int i=1;i<=x;i++){
+    dp[i]=INT_MAX;
+}
+/*
+the looping condition keep inner loop from 0 to n-1 cause it is accesing the array 
+the outer loop should be keept from 1 to x cause it is filling the dp table 
+*/
+for(int i=1;i<=x;i++){
+    for(int j=0;j<n;j++){
+        if((a[j]<=i)&&(dp[i-a[j]] != INT_MAX)){
+            dp[i]=min(dp[i],dp[i-a[j]]+1);
+        }
+    }
+}
+if(dp[x]==INT_MAX){
+    printf("-1\n");
+}else{
+printf("%d",dp[x]);
+}
+free(dp);
+ return 0;
+}
+
+#include<stdio.h>
+#include<stdlib.h>
+#define mod 1000000007
+int main(){
+int n,x;
+scanf("%d %d",&n,&x);
+int*c=malloc(n*sizeof(int));
+for(int i=0;i<n;i++){
+    scanf("%d",&c[i]);
+}
+int*dp=malloc((x+1)*sizeof(int));
+dp[0]=1;
+ 
+for(int i=1;i<=x;i++){
+    for(int j=0;j<n;j++){if(i-c[j]>=0){
+dp[i]=(dp[i]+dp[i-c[j]])%mod;
+    }
+}
+}
+printf("%d\n",dp[x]);
+    return 0;
+}
+#include <stdio.h>
+#include <stdlib.h>
+#define mod 1000000007
+
+// ways(i, x): number of ways to form sum x using coins from index i to n-1
+int way(int i, int n, int x, int *c, int **memo) {
+    if (x == 0) return 1;   // valid combination
+    if (x < 0) return 0;    // overshoot
+    if (i == n) return 0;   // no coins left
+
+    if (memo[i][x] != -1) return memo[i][x];
+
+    long long total = 0;
+
+    // Option 1: use coin c[i] (can reuse same coin)
+    if (x - c[i] >= 0)
+        total += way(i, n, x - c[i], c, memo);
+
+    // Option 2: skip this coin
+    total += way(i + 1, n, x, c, memo);
+
+    memo[i][x] = total % mod;
+    return memo[i][x];
+}
+
+int main() {
+    int n, x;
+    scanf("%d %d", &n, &x);
+
+    int *c = malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++)
+        scanf("%d", &c[i]);
+
+    // memo[i][x] where i = coin index, x = remaining sum
+    int **memo = malloc(n * sizeof(int *));
+    for (int i = 0; i < n; i++) {
+        memo[i] = malloc((x + 1) * sizeof(int));
+        for (int j = 0; j <= x; j++)
+            memo[i][j] = -1;
+    }
+
+    printf("%d\n", way(0, n, x, c, memo));
+
+    for (int i = 0; i < n; i++)
+        free(memo[i]);
+    free(memo);
+    free(c);
+    return 0;
+}
+
+
+int max(int a, int b) {
+    if (a > b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+int longestCommonSubsequence(char* text1, char* text2) {
+    int l1 = strlen(text1);
+    int l2 = strlen(text2);
+
+    int dp[l1 + 1][l2 + 1];
+
+    for (int i = 0; i <= l1; i++) {
+        for (int j = 0; j <= l2; j++) {
+            if (i == 0 || j == 0)
+                dp[i][j] = 0;
+        }
+    }
+
+    for (int i = 1; i <= l1; i++) {
+        for (int j = 1; j <= l2; j++) {
+            if (text1[i - 1] == text2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[l1][l2];
+}
+
+int min(int a,int b){
+    if(a>b){
+        return b;
+    }else{
+        return a;
+    }
+}
+ int coinChange(int* coins, int coinsSize, int amount) {
+int*dp=malloc((amount+1)*sizeof(long long));
+for(int i=0;i<=amount;i++){
+    dp[i]=10005;
+}
+dp[0]=0;
+for(int i=1;i<=amount;i++){
+    for(int j=0;j<coinsSize;j++){
+        if(i>=coins[j]){
+        dp[i]=min(dp[i],dp[i-coins[j]]+1);
+        }
+    }
+}
+int ans;
+if(dp[amount] == 10005){
+    return -1;
+}else{
+    ans=dp[amount];
+}
+free(dp);
+return ans;
+}
+
+int* countBits(int n, int* returnSize) {
+    *returnSize = n + 1; // You must set this value
+    int* ans = malloc((n + 1) * sizeof(int));
+
+    ans[0] = 0;
+
+    for (int i = 1; i <= n; i++) {
+        int count = 0;
+        int x = i;
+        while (x != 0) {
+            x = x & (x - 1);
+            count++;
+        }
+        ans[i] = count;
+int maxProfit(int* prices, int pricesSize) {
+    int max=0;
+    int min=prices[0];
+    /*
+    if the min price is after the max then no trade
+    */
+    for(int i=0;i<pricesSize;i++){
+        if(prices[i]<min){
+            min=prices[i];
+        }else if((prices[i]-min) > max){
+            max=prices[i]-min;
+        }
+    }
+    return max;
+}
+
+    }
+
+    return ans; // ✅ valid return
+}
+
+int climbStairs(int n) {
+    int a=1;
+    int b=2;
+    int temp;
+    for(int i=3;i<=n;i++){
+        temp=a+b;
+        a=b;
+        b=temp;
+    }
+    if(n==1){
+        return 1;
+    }
+    if(n==2){
+        return 2;
+    }
+    return temp;
+}
+
+int min(int a,int b){
+    if(a>b){
+        return b;
+    }else{
+        return a;
+    }
+}
+    int minCostClimbingStairs(int* cost, int costSize) {
+if(costSize == 0)return 0;
+if(costSize==1)return cost[0];
+
+int l1=cost[0];
+int l2=cost[1];
+
+for(int i=2;i<costSize;i++){
+    int present=cost[i]+min(l1,l2);
+    l1=l2;
+    l2=present;
+}
+return min(l2,l1);
+}
+
+🐸 1. Frog Jump (1-Step / 2-Step)
+
+State: dp[i] = min cost to reach stone i.
+Transition: dp[i] = min(dp[i-1] + |h[i]-h[i-1]|, dp[i-2] + |h[i]-h[i-2]|)
+Base: dp[1] = 0.
+➡️ Bottom-up simple tabulation.
+
+🐸 2. Frog Jump (K-distance – Recursion + Memoization)
+
+State: f(n) = min cost to reach stone n.
+Transition: f(n) = min( f(n-i) + |h[n]-h[n-i]| ) for all i ≤ k.
+Base: f(1)=0.
+➡️ Top-down recursion + memoization.
+
+🎲 3. Dice Combinations (Number of ways to get sum n)
+
+State: f(n) = number of ways to form sum n.
+Transition: f(n) = f(n-1)+f(n-2)+…+f(n-6)
+Base: f(0)=1.
+➡️ Count ordered ways using 6-faced dice, % mod.
+
+💰 4. Coin Change (Minimum Coins – Bottom-Up)
+
+State: dp[x] = min coins to form sum x.
+Transition: dp[x] = min(dp[x], dp[x-coin[j]] + 1)
+Base: dp[0]=0, others = ∞.
+➡️ Nested loops: outer → sum, inner → coins.
+
+🪙 5. Coin Combinations I (Count Ordered Ways)
+
+State: dp[x] = number of ordered ways to form sum x.
+Transition: dp[i] += dp[i-coin[j]]
+Base: dp[0]=1.
+➡️ Order matters → outer loop on sum.
+
+🪙 6. Coin Combinations II (Count Unordered Ways – Recursion + Memo)
+
+State: f(i, x) = ways to form sum x using coins from index i.
+Transition:
+
+Take current coin → f(i, x-coin[i])
+
+Skip coin → f(i+1, x)
+Base: if x==0 → 1; if i==n or x<0 → 0.
+➡️ Avoids duplicates → unordered combinations.
+
+🧵 7. LCS (Longest Common Subsequence)
+
+State: dp[i][j] = LCS of text1[0..i-1] & text2[0..j-1].
+Transition:
+
+if same: dp[i][j] = dp[i-1][j-1] + 1
+
+else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+Base: first row/col = 0.
+➡️ Classic 2D DP on strings.
+
+💵 8. Coin Change (Leetcode 322 – Min Coins)
+
+Same logic as #4.
+Use large sentinel (like 10005) for impossible.
+Return -1 if unreachable.
+
+➡️ dp[i] = min(dp[i], dp[i - coin[j]] + 1).
+
+🔢 9. Count Bits
+
+For each i: count bits using
+while(x) { x &= (x-1); count++; }
+➡️ Not DP, bit manipulation practice.
+
+📈 10. Best Time to Buy & Sell Stock
+
+Track running minimum and maximum profit:
+
+minPrice = min(minPrice, price[i])
+maxProfit = max(maxProfit, price[i] - minPrice)
+
+
+➡️ Greedy single pass O(n).
+
+🧗 11. Climb Stairs
+
+State: f(n) = number of ways to reach step n.
+Transition: f(n)=f(n-1)+f(n-2)
+Base: f(1)=1, f(2)=2.
+➡️ Fibonacci pattern; use rolling variables.
+
+🪜 12. Min Cost Climbing Stairs
+
+State: cost to reach step i = cost[i] + min(prev1, prev2)
